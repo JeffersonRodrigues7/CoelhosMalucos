@@ -43,11 +43,11 @@ Abaixo está o que foi acrescentado no arquivo **window.hpp**.
   //Utilizada para pegarmos um valor aleatório entre um range informado
   std::default_random_engine m_randomEngine;
   /*
-  * Variáveis de escala e variação de tempo que poderão
+  * Variáveis de escala e variação da velocidade que poderão
   * ser trocadas com sliders no onPaintUI()
   */
   float scale{};
-  float deltaTime{};
+  float speed{};
 
   /**
   * Struct do Taz com as variáveis de posição, rotação e a direção de movimento
