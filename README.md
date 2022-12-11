@@ -138,9 +138,9 @@ No **onUpdate** fazemos a renderização dos taz do fundo
 ```
 
 ### Referências
-- **Arquivo taz.obj utilizado no projeto: ** https://www.cgtrader.com/items/1997904/download-page
-- **Projeto Starfield: ** https://hbatagelo.github.io/cg/starfield.html
-- **Projeto Viewer6: ** https://hbatagelo.github.io/cg/envmapping.html
+- **Arquivo taz.obj utilizado no projeto:** https://www.cgtrader.com/items/1997904/download-page
+- **Projeto Starfield:** https://hbatagelo.github.io/cg/starfield.html
+- **Projeto Viewer6:** https://hbatagelo.github.io/cg/envmapping.html
 
 ### Projeto em WebAssembly
 https://hadeoliveira.github.io/Projeto4ABCG/
