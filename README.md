@@ -61,13 +61,13 @@ Abaixo está o que foi acrescentado no arquivo **window.hpp**.
   //Array de Taz, passamos a quantidade máxima de 100
   std::array<Taz, 100> m_taz;
 
-  //Função que randomiza posição inicial e direção de movimento dos coelhos
+  //Função que randomiza posição inicial e direção de movimento dos taz's
   void randomizeTaz(Taz &Taz);
 ```
 
 #### window.cpp
 
-No **randomizeTaz** geramos as posições, rotações e direções randomizadas dos coelhos.
+No **randomizeTaz** geramos as posições, rotações e direções randomizadas dos taz's.
 
 ```
 void Window::randomizeTaz(Taz &taz) {
@@ -76,7 +76,7 @@ void Window::randomizeTaz(Taz &taz) {
   std::uniform_real_distribution<float> distPosXY(-2.0f, 2.0f);
   std::uniform_real_distribution<float> distPosZ(0.0f, 0.0f);
 
-  // Definindo posição do coelho
+  // Definindo posição do taz
   taz.m_position =
       glm::vec3(distPosXY(m_randomEngine), distPosXY(m_randomEngine),
                 distPosZ(m_randomEngine));
