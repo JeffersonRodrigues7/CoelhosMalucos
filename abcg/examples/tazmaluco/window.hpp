@@ -26,7 +26,7 @@ private:
   TrackBall m_trackBallLight;
 
   float scale{};
-  float deltaTime{};
+  float speed{};
   float m_zoom{};
 
   float m_angle{};
