@@ -100,7 +100,7 @@ void Window::randomizeTaz(Taz &taz) {
 }
 ```
 
-**No onPaint fazemos a renderização dos taz do fundo**
+No **onPaint** fazemos a renderização dos taz do fundo
 
 ```
   // Renderização dos taz
@@ -117,7 +117,30 @@ void Window::randomizeTaz(Taz &taz) {
   }
 ```
 
+No **onUpdate** fazemos a renderização dos taz do fundo
+
+```
+  // Calculamos o deltaTime a atualizamos o ângulo do objeto
+  auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
+  m_angle = glm::wrapAngle(m_angle + glm::radians(90.0f) * deltaTime);
+
+  // Atualizamos a posição de cada Taz de acordo com a direção e velocidade
+  for (auto &taz : m_taz) {
+    taz.m_position.x += taz.m_direction.x * deltaTime * speed;
+    taz.m_position.y += taz.m_direction.y * deltaTime * speed;
+
+    // Se o Taz passar do limite estipulado reiniciamos sua posição e direção de movimento chamando a função randomizeTaz
+    if (taz.m_position.x > 2.0f || taz.m_position.x < -2.0f ||
+        taz.m_position.y > 2.0f || taz.m_position.y < -2.0f) {
+      randomizeTaz(taz);
+    }
+  }
+```
+
 ### Referências
-- https://www.cgtrader.com/items/1997904/download-page
-- https://hbatagelo.github.io/cg/starfield.html
-- https://hbatagelo.github.io/cg/envmapping.html
+- **Arquivo taz.obj utilizado no projeto: ** https://www.cgtrader.com/items/1997904/download-page
+- **Projeto Starfield: ** https://hbatagelo.github.io/cg/starfield.html
+- **Projeto Viewer6: ** https://hbatagelo.github.io/cg/envmapping.html
+
+### Projeto em WebAssembly
+https://hadeoliveira.github.io/Projeto4ABCG/
