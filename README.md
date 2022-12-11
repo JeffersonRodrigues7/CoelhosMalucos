@@ -120,4 +120,4 @@ void Window::randomizeTaz(Taz &taz) {
 ### Referências
 - https://www.cgtrader.com/items/1997904/download-page
 - https://hbatagelo.github.io/cg/starfield.html
-- https://hbatagelo.github.io/cg/viewer2.html
+- https://hbatagelo.github.io/cg/envmapping.html
