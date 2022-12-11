@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
     window.setWindowSettings({
         .width = 1200,
         .height = 900,
-        .title = "Coelhos Malucos",
+        .title = "Taz Maluco",
     });
 
     app.run(window);

@@ -1,1 +1,1 @@
-add_subdirectory(coelhosmalucos)
+add_subdirectory(tazmaluco)

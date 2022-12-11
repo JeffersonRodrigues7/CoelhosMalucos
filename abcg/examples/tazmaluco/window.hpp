@@ -24,17 +24,20 @@ private:
 
   TrackBall m_trackBallModel;
   TrackBall m_trackBallLight;
+
+  float scale{};
+  float deltaTime{};
   float m_zoom{};
 
   float m_angle{};
   std::default_random_engine m_randomEngine;
-  struct Bunny {
+  struct Taz {
     glm::vec3 m_position{};
     glm::vec3 m_rotationAxis{};
     glm::vec2 m_direction{};
   };
-  std::array<Bunny, 100> m_bunnies;
-  void randomizeBunny(Bunny &bunny);
+  std::array<Taz, 100> m_taz;
+  void randomizeTaz(Taz &Taz);
 
   glm::mat4 m_modelMatrix{1.0f};
   glm::mat4 m_viewMatrix{1.0f};
@@ -42,8 +45,8 @@ private:
 
   // Shaders
   std::vector<char const *> m_shaderNames{
-      "cubereflect", "cuberefract", "normalmapping", "texture", "blinnphong",
-      "phong",       "gouraud",     "normal",        "depth"};
+      "texture", "normalmapping", "cubereflect", "cuberefract", "blinnphong",
+      "phong",   "gouraud",       "normal",      "depth"};
   std::vector<GLuint> m_programs;
   int m_currentProgramIndex{};
 
