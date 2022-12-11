@@ -35,6 +35,8 @@ void Window::onEvent(SDL_Event const &event) {
 }
 
 void Window::onCreate() {
+  scale = 0.2f;
+  deltaTime = 0.02f;
   auto const assetsPath{abcg::Application::getAssetsPath()};
 
   abcg::glClearColor(0, 0, 0, 1);
@@ -49,8 +51,8 @@ void Window::onCreate() {
     m_programs.push_back(program);
   }
 
-  // Load default model
-  loadModel(assetsPath + "bunny.obj");
+  // Load Taz Man model
+  loadModel(assetsPath + "tazmania.obj");
 
   // Initial trackball spin
   m_trackBallModel.setAxis(glm::normalize(glm::vec3(1, 1, 1)));
@@ -58,35 +60,29 @@ void Window::onCreate() {
 
   createSkybox();
 
-  // Camera at (0,0,0) and looking towards the negative z
-  glm::vec3 const eye{0.0f, 0.0f, 0.0f};
-  glm::vec3 const at{0.0f, 0.0f, -1.0f};
-  glm::vec3 const up{0.0f, 1.0f, 0.0f};
-  m_viewMatrix = glm::lookAt(eye, at, up);
-
-  // Setup bunnies
-  for (auto &bunny : m_bunnies) {
-    randomizeBunny(bunny);
+  // Setup Taz
+  for (auto &taz : m_taz) {
+    randomizeTaz(taz);
   }
 }
 
-void Window::randomizeBunny(Bunny &bunny) {
+void Window::randomizeTaz(Taz &taz) {
   // Random position: x and y in [-20, 20), z in [-100, 0)
   std::uniform_real_distribution<float> distPosXY(-2.0f, 2.0f);
   std::uniform_real_distribution<float> distPosZ(0.0f, 0.0f);
-  bunny.m_position =
+  taz.m_position =
       glm::vec3(distPosXY(m_randomEngine), distPosXY(m_randomEngine),
                 distPosZ(m_randomEngine));
 
   // Random rotation axis
-  bunny.m_rotationAxis = glm::sphericalRand(1.0f);
+  taz.m_rotationAxis = glm::sphericalRand(1.0f);
 
   std::uniform_int_distribution<int> direction(-1, 1);
-  bunny.m_direction =
+  taz.m_direction =
       glm::vec2(direction(m_randomEngine), direction(m_randomEngine));
 
-  while (bunny.m_direction.x == 0 && bunny.m_direction.y == 0) {
-    bunny.m_direction =
+  while (taz.m_direction.x == 0 && taz.m_direction.y == 0) {
+    taz.m_direction =
         glm::vec2(direction(m_randomEngine), direction(m_randomEngine));
   }
 }
@@ -171,13 +167,13 @@ void Window::onPaint() {
 
   m_model.render(m_trianglesToDraw);
 
-  // Render each star
-  for (auto &bunny : m_bunnies) {
-    // Compute model matrix of the current star
+  // Render each taz
+  for (auto &taz : m_taz) {
+    // Compute model matrix of the current taz
     glm::mat4 modelMatrix{1.0f};
-    modelMatrix = glm::translate(modelMatrix, bunny.m_position);
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f));
-    modelMatrix = glm::rotate(modelMatrix, m_angle, bunny.m_rotationAxis);
+    modelMatrix = glm::translate(modelMatrix, taz.m_position);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(scale));
+    modelMatrix = glm::rotate(modelMatrix, m_angle, taz.m_rotationAxis);
 
     // Set uniform variable
     abcg::glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, &modelMatrix[0][0]);
@@ -200,20 +196,17 @@ void Window::onUpdate() {
                   glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
   // Increase angle by 90 degrees per second
-  auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
+  // auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
   m_angle = glm::wrapAngle(m_angle + glm::radians(90.0f) * deltaTime);
 
-  // Update stars
-  for (auto &bunny : m_bunnies) {
-    // Increase z by 2 units per second
-    bunny.m_position.x += bunny.m_direction.x * deltaTime * 2.0f;
-    bunny.m_position.y += bunny.m_direction.y * deltaTime * 2.0f;
-    // If this star is behind the camera, select a new random position &
+  // Update Taz
+  for (auto &taz : m_taz) {
+    taz.m_position.x += taz.m_direction.x * deltaTime * 2.0f;
+    taz.m_position.y += taz.m_direction.y * deltaTime * 2.0f;
 
-    // orientation and move it back to -100
-    if (bunny.m_position.x > 2.0f || bunny.m_position.x < -2.0f ||
-        bunny.m_position.y > 2.0f || bunny.m_position.y < -2.0f) {
-      randomizeBunny(bunny);
+    if (taz.m_position.x > 2.0f || taz.m_position.x < -2.0f ||
+        taz.m_position.y > 2.0f || taz.m_position.y < -2.0f) {
+      randomizeTaz(taz);
     }
   }
 }
@@ -251,7 +244,7 @@ void Window::onPaintUI() {
 
   // Create main window widget
   {
-    auto widgetSize{ImVec2(222, 190)};
+    auto widgetSize{ImVec2(240, 210)};
 
     if (!m_model.isUVMapped()) {
       // Add extra space for static text
@@ -289,6 +282,9 @@ void Window::onPaintUI() {
     ImGui::PushItemWidth(widgetSize.x - 16);
     ImGui::SliderInt(" ", &m_trianglesToDraw, 0, m_model.getNumTriangles(),
                      "%d triangles");
+    ImGui::SliderFloat("Escala", &scale, 0.1f, 0.3f, "%.2f: escala coelhos");
+    ImGui::SliderFloat("Delta Time", &deltaTime, 0.01f, 0.04f,
+                       "%.2f: velocidade");
     ImGui::PopItemWidth();
 
     static bool faceCulling{};
