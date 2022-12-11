@@ -36,7 +36,7 @@ void Window::onEvent(SDL_Event const &event) {
 
 void Window::onCreate() {
   scale = 0.2f;
-  deltaTime = 0.02f;
+  speed = 2.0f;
   auto const assetsPath{abcg::Application::getAssetsPath()};
 
   abcg::glClearColor(0, 0, 0, 1);
@@ -196,13 +196,13 @@ void Window::onUpdate() {
                   glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
   // Increase angle by 90 degrees per second
-  // auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
+  auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
   m_angle = glm::wrapAngle(m_angle + glm::radians(90.0f) * deltaTime);
 
   // Update Taz
   for (auto &taz : m_taz) {
-    taz.m_position.x += taz.m_direction.x * deltaTime * 2.0f;
-    taz.m_position.y += taz.m_direction.y * deltaTime * 2.0f;
+    taz.m_position.x += taz.m_direction.x * deltaTime * speed;
+    taz.m_position.y += taz.m_direction.y * deltaTime * speed;
 
     if (taz.m_position.x > 2.0f || taz.m_position.x < -2.0f ||
         taz.m_position.y > 2.0f || taz.m_position.y < -2.0f) {
@@ -282,9 +282,8 @@ void Window::onPaintUI() {
     ImGui::PushItemWidth(widgetSize.x - 16);
     ImGui::SliderInt(" ", &m_trianglesToDraw, 0, m_model.getNumTriangles(),
                      "%d triangles");
-    ImGui::SliderFloat("Escala", &scale, 0.1f, 0.3f, "%.2f: escala coelhos");
-    ImGui::SliderFloat("Delta Time", &deltaTime, 0.01f, 0.04f,
-                       "%.2f: velocidade");
+    ImGui::SliderFloat("Escala", &scale, 0.1f, 0.3f, "%.2f: escala taz");
+    ImGui::SliderFloat("Velocidade", &speed, 1.0f, 5.0f, "%.1f: velocidade");
     ImGui::PopItemWidth();
 
     static bool faceCulling{};
